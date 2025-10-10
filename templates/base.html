@@ -6,35 +6,117 @@
     <title>{% block title %}Micro-Lending Platform{% endblock %}</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            300: '#7dd3fc',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        },
+                        secondary: {
+                            50: '#f8fafc',
+                            100: '#f1f5f9',
+                            200: '#e2e8f0',
+                            300: '#cbd5e1',
+                            400: '#94a3b8',
+                            500: '#64748b',
+                            600: '#475569',
+                            700: '#334155',
+                            800: '#1e293b',
+                            900: '#0f172a',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
 </head>
-<body class="bg-gray-50 min-h-screen">
+<body class="bg-gray-100 min-h-screen font-sans">
     <!-- Navigation Bar -->
-    <nav class="bg-indigo-600 shadow-lg">
+    <nav class="bg-white border-b border-gray-200 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
                 <div class="flex items-center">
-                    <a href="{{ url_for('index') }}" class="text-white text-xl font-bold">
-                        🤝 Micro-Lending Platform
+                    <a href="{{ url_for('index') }}" class="flex items-center">
+                        <svg class="h-8 w-8 text-primary-600" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 4.75V6.25" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                            <path d="M17.1266 6.87347L16.0659 7.93413" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                            <path d="M19.25 12L17.75 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                            <path d="M17.1266 17.1265L16.0659 16.0659" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                            <path d="M12 17.75V19.25" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                            <path d="M7.9342 16.0659L6.87354 17.1265" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                            <path d="M6.25 12L4.75 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                            <path d="M7.9342 7.93413L6.87354 6.87347" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                            <path d="M12 14.25C13.2426 14.25 14.25 13.2426 14.25 12C14.25 10.7574 13.2426 9.75 12 9.75C10.7574 9.75 9.75 10.7574 9.75 12C9.75 13.2426 10.7574 14.25 12 14.25Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                        </svg>
+                        <span class="ml-2 text-xl font-semibold text-gray-800">Micro-Lending Platform</span>
                     </a>
                 </div>
-                <div class="flex items-center space-x-4">
-                    <a href="{{ url_for('index') }}" class="text-white hover:text-indigo-200 px-3 py-2 rounded-md">Home</a>
+                <div class="hidden md:flex items-center space-x-1">
+                    <a href="{{ url_for('index') }}" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-primary-600 hover:bg-gray-50 transition-colors">Home</a>
                     {% if session.user_id %}
-                        <a href="{{ url_for('dashboard.index') }}" class="text-white hover:text-indigo-200 px-3 py-2 rounded-md">Dashboard</a>
+                        <a href="{{ url_for('dashboard.index') }}" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-primary-600 hover:bg-gray-50 transition-colors">
+                            <i class="fas fa-chart-line mr-1"></i> Dashboard
+                        </a>
                         {% if session.user_role in ['beneficiary', 'admin'] %}
-                            <a href="{{ url_for('aid.request_aid') }}" class="text-white hover:text-indigo-200 px-3 py-2 rounded-md">Request Aid</a>
+                            <a href="{{ url_for('aid.request_aid') }}" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-primary-600 hover:bg-gray-50 transition-colors">
+                                <i class="fas fa-hand-holding-usd mr-1"></i> Request Aid
+                            </a>
                         {% endif %}
                         {% if session.user_role in ['donor', 'admin'] %}
-                            <a href="{{ url_for('aid.manage_requests') }}" class="text-white hover:text-indigo-200 px-3 py-2 rounded-md">Manage Requests</a>
+                            <a href="{{ url_for('aid.manage_requests') }}" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-primary-600 hover:bg-gray-50 transition-colors">
+                                <i class="fas fa-tasks mr-1"></i> Manage Requests
+                            </a>
                         {% endif %}
-                        <a href="{{ url_for('aid.my_requests') }}" class="text-white hover:text-indigo-200 px-3 py-2 rounded-md">My Requests</a>
-                        <span class="text-indigo-200">{{ session.user_name }}</span>
-                        <a href="{{ url_for('auth.logout') }}" class="bg-indigo-700 text-white px-4 py-2 rounded-md hover:bg-indigo-800">Logout</a>
+                        <a href="{{ url_for('aid.my_requests') }}" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-primary-600 hover:bg-gray-50 transition-colors">
+                            <i class="fas fa-list-alt mr-1"></i> My Requests
+                        </a>
+                        <div class="ml-3 relative">
+                            <div class="flex items-center">
+                                <button type="button" class="bg-gray-100 flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500" id="user-menu-button">
+                                    <span class="sr-only">Open user menu</span>
+                                    <div class="h-8 w-8 rounded-full bg-primary-600 flex items-center justify-center text-white">
+                                        {{ session.user_name[0].upper() }}
+                                    </div>
+                                </button>
+                                <span class="ml-2 text-sm font-medium text-gray-700">{{ session.user_name }}</span>
+                            </div>
+                        </div>
+                        <a href="{{ url_for('auth.logout') }}" class="ml-4 px-4 py-2 rounded-md text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors">
+                            <i class="fas fa-sign-out-alt mr-1"></i> Logout
+                        </a>
                     {% else %}
-                        <a href="{{ url_for('auth.login') }}" class="text-white hover:text-indigo-200 px-3 py-2 rounded-md">Login</a>
-                        <a href="{{ url_for('auth.register') }}" class="bg-white text-indigo-600 px-4 py-2 rounded-md hover:bg-indigo-50">Register</a>
+                        <a href="{{ url_for('auth.login') }}" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-primary-600 hover:bg-gray-50 transition-colors">
+                            <i class="fas fa-sign-in-alt mr-1"></i> Login
+                        </a>
+                        <a href="{{ url_for('auth.register') }}" class="ml-4 px-4 py-2 rounded-md text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors">
+                            <i class="fas fa-user-plus mr-1"></i> Register
+                        </a>
                     {% endif %}
+                </div>
+                <!-- Mobile menu button -->
+                <div class="md:hidden flex items-center">
+                    <button type="button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-500" aria-expanded="false">
+                        <span class="sr-only">Open main menu</span>
+                        <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
                 </div>
             </div>
         </div>
@@ -45,8 +127,21 @@
         {% if messages %}
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4">
                 {% for category, message in messages %}
-                    <div class="{% if category == 'error' %}bg-red-100 border-red-400 text-red-700{% elif category == 'success' %}bg-green-100 border-green-400 text-green-700{% else %}bg-blue-100 border-blue-400 text-blue-700{% endif %} border px-4 py-3 rounded mb-4">
-                        {{ message }}
+                    <div class="{% if category == 'error' %}bg-red-50 border-l-4 border-red-400 text-red-700{% elif category == 'success' %}bg-green-50 border-l-4 border-green-400 text-green-700{% else %}bg-blue-50 border-l-4 border-blue-400 text-blue-700{% endif %} p-4 rounded-md shadow-sm mb-4 flex items-center justify-between">
+                        <div class="flex items-center">
+                            {% if category == 'error' %}
+                                <i class="fas fa-exclamation-circle mr-3 text-red-500"></i>
+                            {% elif category == 'success' %}
+                                <i class="fas fa-check-circle mr-3 text-green-500"></i>
+                            {% else %}
+                                <i class="fas fa-info-circle mr-3 text-blue-500"></i>
+                            {% endif %}
+                            <p class="text-sm font-medium">{{ message }}</p>
+                        </div>
+                        <button type="button" class="text-gray-400 hover:text-gray-500 focus:outline-none" onclick="this.parentElement.remove()">
+                            <span class="sr-only">Dismiss</span>
+                            <i class="fas fa-times"></i>
+                        </button>
                     </div>
                 {% endfor %}
             </div>
@@ -59,9 +154,63 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-gray-800 text-white mt-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 text-center">
-            <p>&copy; 2025 Micro-Lending Platform. Built with Flask, MongoDB & Tailwind CSS</p>
+    <footer class="bg-white border-t border-gray-200 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="col-span-2">
+                    <div class="flex items-center">
+                        <svg class="h-8 w-8 text-primary-600" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 4.75V6.25" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                            <path d="M17.1266 6.87347L16.0659 7.93413" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                            <path d="M19.25 12L17.75 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                            <path d="M17.1266 17.1265L16.0659 16.0659" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                            <path d="M12 17.75V19.25" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                            <path d="M7.9342 16.0659L6.87354 17.1265" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                            <path d="M6.25 12L4.75 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                            <path d="M7.9342 7.93413L6.87354 6.87347" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                            <path d="M12 14.25C13.2426 14.25 14.25 13.2426 14.25 12C14.25 10.7574 13.2426 9.75 12 9.75C10.7574 9.75 9.75 10.7574 9.75 12C9.75 13.2426 10.7574 14.25 12 14.25Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                        </svg>
+                        <span class="ml-2 text-xl font-semibold text-gray-800">Micro-Lending Platform</span>
+                    </div>
+                    <p class="mt-4 text-sm text-gray-600">
+                        Empowering communities through financial inclusion and support. Our platform connects donors with beneficiaries to create sustainable economic opportunities.
+                    </p>
+                </div>
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-800 tracking-wider uppercase">Resources</h3>
+                    <ul class="mt-4 space-y-2">
+                        <li><a href="#" class="text-sm text-gray-600 hover:text-primary-600">Documentation</a></li>
+                        <li><a href="#" class="text-sm text-gray-600 hover:text-primary-600">How It Works</a></li>
+                        <li><a href="#" class="text-sm text-gray-600 hover:text-primary-600">FAQ</a></li>
+                        <li><a href="#" class="text-sm text-gray-600 hover:text-primary-600">Support</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-800 tracking-wider uppercase">Legal</h3>
+                    <ul class="mt-4 space-y-2">
+                        <li><a href="#" class="text-sm text-gray-600 hover:text-primary-600">Privacy Policy</a></li>
+                        <li><a href="#" class="text-sm text-gray-600 hover:text-primary-600">Terms of Service</a></li>
+                        <li><a href="#" class="text-sm text-gray-600 hover:text-primary-600">Cookie Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="mt-8 border-t border-gray-200 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-sm text-gray-500">&copy; 2025 Micro-Lending Platform. All rights reserved.</p>
+                <div class="mt-4 md:mt-0 flex space-x-6">
+                    <a href="#" class="text-gray-400 hover:text-gray-500">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-gray-500">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-gray-500">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-gray-500">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                </div>
+            </div>
         </div>
     </footer>
     

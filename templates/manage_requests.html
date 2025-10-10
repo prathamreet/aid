@@ -4,48 +4,110 @@
 
 {% block content %}
 <div>
-    <h1 class="text-3xl font-bold mb-8">Pending Aid Requests</h1>
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-2xl font-semibold text-gray-900">Pending Aid Requests</h1>
+        <div class="flex space-x-3">
+            <div class="relative">
+                <button type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
+                    <i class="fas fa-filter mr-2"></i>
+                    Filter
+                    <i class="fas fa-chevron-down ml-2"></i>
+                </button>
+            </div>
+            <button type="button" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
+                <i class="fas fa-sync-alt mr-2"></i>
+                Refresh
+            </button>
+        </div>
+    </div>
     
     {% if requests %}
-        <div class="grid gap-6">
-            {% for req in requests %}
-            <div class="bg-white rounded-lg shadow-md p-6">
-                <div class="flex justify-between items-start mb-4">
-                    <div>
-                        <h3 class="text-xl font-bold text-gray-900">{{ req.user_name }}</h3>
-                        <span class="inline-block bg-indigo-100 text-indigo-800 text-sm px-3 py-1 rounded-full mt-2">
-                            {{ req.category }}
+        <div class="bg-white shadow-sm border border-gray-200 rounded-lg overflow-hidden">
+            <div class="px-6 py-4 border-b border-gray-200 bg-gray-50">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <span class="text-sm font-medium text-gray-900">{{ requests|length }} pending requests</span>
+                        <span class="ml-2 px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                            Requires Action
                         </span>
                     </div>
-                    <div class="text-right">
-                        <div class="text-2xl font-bold text-green-600">₹{{ "%.2f"|format(req.amount) }}</div>
-                        <div class="text-sm text-gray-500">{{ req.created_at.strftime('%b %d, %Y') }}</div>
+                    <div class="flex items-center">
+                        <span class="text-sm text-gray-500 mr-2">Sort by:</span>
+                        <select class="text-sm border-gray-300 rounded-md shadow-sm focus:border-primary-500 focus:ring-primary-500">
+                            <option>Date (Newest)</option>
+                            <option>Date (Oldest)</option>
+                            <option>Amount (High to Low)</option>
+                            <option>Amount (Low to High)</option>
+                        </select>
                     </div>
                 </div>
-                
-                <div class="mb-4">
-                    <h4 class="font-medium text-gray-700 mb-2">Purpose:</h4>
-                    <p class="text-gray-600">{{ req.purpose }}</p>
-                </div>
-                
-                <div class="flex space-x-3">
-                    <a href="{{ url_for('aid.approve_request', request_id=req._id) }}" 
-                        class="bg-green-600 text-white px-6 py-2 rounded-md hover:bg-green-700 flex-1 text-center">
-                        ✓ Approve
-                    </a>
-                    <a href="{{ url_for('aid.reject_request', request_id=req._id) }}" 
-                        class="bg-red-600 text-white px-6 py-2 rounded-md hover:bg-red-700 flex-1 text-center">
-                        ✗ Reject
-                    </a>
-                </div>
             </div>
-            {% endfor %}
+            
+            <ul class="divide-y divide-gray-200">
+                {% for req in requests %}
+                <li class="p-6 hover:bg-gray-50 transition-colors">
+                    <div class="flex flex-col md:flex-row md:items-center md:justify-between">
+                        <div class="flex-1">
+                            <div class="flex items-center">
+                                <div class="h-10 w-10 rounded-full bg-primary-600 flex items-center justify-center text-white font-medium">
+                                    {{ req.user_name[0].upper() }}
+                                </div>
+                                <div class="ml-4">
+                                    <div class="flex items-center">
+                                        <h3 class="text-lg font-medium text-gray-900">{{ req.user_name }}</h3>
+                                        <span class="ml-2 px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary-100 text-primary-800">
+                                            {{ req.category }}
+                                        </span>
+                                    </div>
+                                    <div class="mt-1 flex items-center text-sm text-gray-500">
+                                        <i class="fas fa-calendar-alt mr-1.5 text-gray-400"></i>
+                                        <span>Requested on {{ req.created_at.strftime('%d %b, %Y') }}</span>
+                                        <span class="mx-2">•</span>
+                                        <i class="fas fa-clock mr-1.5 text-gray-400"></i>
+                                        <span>{{ req.created_at.strftime('%H:%M') }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-4 md:mt-2">
+                                <div class="text-sm text-gray-900 font-medium">Purpose:</div>
+                                <p class="mt-1 text-sm text-gray-600">{{ req.purpose }}</p>
+                            </div>
+                        </div>
+                        <div class="mt-4 md:mt-0 md:ml-6 flex flex-col items-end">
+                            <div class="text-2xl font-semibold text-gray-900">₹{{ "%.2f"|format(req.amount) }}</div>
+                            <div class="mt-4 flex space-x-3">
+                                <a href="{{ url_for('aid.approve_request', request_id=req._id) }}" 
+                                   class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                                    <i class="fas fa-check mr-2"></i> Approve
+                                </a>
+                                <a href="{{ url_for('aid.reject_request', request_id=req._id) }}" 
+                                   class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                                    <i class="fas fa-times mr-2"></i> Reject
+                                </a>
+                                <a href="{{ url_for('aid.complete_request', request_id=req._id) }}" 
+                                   class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
+                                    <i class="fas fa-check-circle mr-2"></i> Complete
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
         </div>
     {% else %}
-        <div class="bg-white rounded-lg shadow-md p-12 text-center">
-            <div class="text-6xl mb-4">📭</div>
-            <h3 class="text-xl font-medium text-gray-700">No pending requests</h3>
-            <p class="text-gray-500 mt-2">All requests have been processed!</p>
+        <div class="bg-white shadow-sm border border-gray-200 rounded-lg p-12 text-center">
+            <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-gray-100">
+                <i class="fas fa-inbox text-gray-400"></i>
+            </div>
+            <h3 class="mt-5 text-lg font-medium text-gray-900">No pending requests</h3>
+            <p class="mt-2 text-sm text-gray-500">All requests have been processed. Check back later for new requests.</p>
+            <div class="mt-6">
+                <button type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
+                    <i class="fas fa-sync-alt mr-2"></i>
+                    Refresh
+                </button>
+            </div>
         </div>
     {% endif %}
 </div>

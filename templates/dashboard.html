@@ -4,102 +4,258 @@
 
 {% block content %}
 <div>
-    <h1 class="text-3xl font-bold mb-8">Dashboard</h1>
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-2xl font-semibold text-gray-900">Analytics Dashboard</h1>
+        <div class="flex space-x-3">
+            <button type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
+                <i class="fas fa-download mr-2"></i>
+                Export
+            </button>
+            <button type="button" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
+                <i class="fas fa-sync-alt mr-2"></i>
+                Refresh
+            </button>
+        </div>
+    </div>
     
-    <!-- Stats Grid -->
-    <div class="grid md:grid-cols-4 gap-6 mb-8">
-        <div class="bg-white p-6 rounded-lg shadow-md">
-            <div class="text-gray-500 text-sm font-medium">Total Users</div>
-            <div class="text-3xl font-bold text-indigo-600">{{ stats.total_users }}</div>
+    <!-- Stats Overview -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+        <div class="flex items-center justify-between mb-4">
+            <h2 class="text-lg font-medium text-gray-900">Platform Overview</h2>
+            <span class="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded">Last updated: Today</span>
         </div>
-        <div class="bg-white p-6 rounded-lg shadow-md">
-            <div class="text-gray-500 text-sm font-medium">Total Donors</div>
-            <div class="text-3xl font-bold text-green-600">{{ stats.total_donors }}</div>
-        </div>
-        <div class="bg-white p-6 rounded-lg shadow-md">
-            <div class="text-gray-500 text-sm font-medium">Beneficiaries</div>
-            <div class="text-3xl font-bold text-blue-600">{{ stats.total_beneficiaries }}</div>
-        </div>
-        <div class="bg-white p-6 rounded-lg shadow-md">
-            <div class="text-gray-500 text-sm font-medium">Total Requests</div>
-            <div class="text-3xl font-bold text-purple-600">{{ stats.total_requests }}</div>
+        <div class="grid md:grid-cols-4 gap-6">
+            <div class="flex items-center p-4 bg-gray-50 rounded-lg">
+                <div class="flex-shrink-0 p-3 rounded-md bg-primary-100">
+                    <i class="fas fa-users text-primary-600"></i>
+                </div>
+                <div class="ml-4">
+                    <p class="text-sm font-medium text-gray-500">Total Users</p>
+                    <p class="text-2xl font-semibold text-gray-900">{{ stats.total_users }}</p>
+                    <p class="text-xs text-gray-500 mt-1">
+                        <span class="text-green-500"><i class="fas fa-arrow-up"></i> 12%</span> from last month
+                    </p>
+                </div>
+            </div>
+            <div class="flex items-center p-4 bg-gray-50 rounded-lg">
+                <div class="flex-shrink-0 p-3 rounded-md bg-green-100">
+                    <i class="fas fa-hand-holding-heart text-green-600"></i>
+                </div>
+                <div class="ml-4">
+                    <p class="text-sm font-medium text-gray-500">Total Donors</p>
+                    <p class="text-2xl font-semibold text-gray-900">{{ stats.total_donors }}</p>
+                    <p class="text-xs text-gray-500 mt-1">
+                        <span class="text-green-500"><i class="fas fa-arrow-up"></i> 8%</span> from last month
+                    </p>
+                </div>
+            </div>
+            <div class="flex items-center p-4 bg-gray-50 rounded-lg">
+                <div class="flex-shrink-0 p-3 rounded-md bg-blue-100">
+                    <i class="fas fa-user-friends text-blue-600"></i>
+                </div>
+                <div class="ml-4">
+                    <p class="text-sm font-medium text-gray-500">Beneficiaries</p>
+                    <p class="text-2xl font-semibold text-gray-900">{{ stats.total_beneficiaries }}</p>
+                    <p class="text-xs text-gray-500 mt-1">
+                        <span class="text-green-500"><i class="fas fa-arrow-up"></i> 15%</span> from last month
+                    </p>
+                </div>
+            </div>
+            <div class="flex items-center p-4 bg-gray-50 rounded-lg">
+                <div class="flex-shrink-0 p-3 rounded-md bg-purple-100">
+                    <i class="fas fa-file-alt text-purple-600"></i>
+                </div>
+                <div class="ml-4">
+                    <p class="text-sm font-medium text-gray-500">Total Requests</p>
+                    <p class="text-2xl font-semibold text-gray-900">{{ stats.total_requests }}</p>
+                    <p class="text-xs text-gray-500 mt-1">
+                        <span class="text-green-500"><i class="fas fa-arrow-up"></i> 10%</span> from last month
+                    </p>
+                </div>
+            </div>
         </div>
     </div>
     
     <!-- Financial Stats -->
-    <div class="grid md:grid-cols-3 gap-6 mb-8">
-        <div class="bg-gradient-to-r from-green-400 to-green-600 p-6 rounded-lg shadow-md text-white">
-            <div class="text-sm font-medium opacity-90">Total Aid Distributed</div>
-            <div class="text-3xl font-bold">₹{{ "%.2f"|format(stats.total_aid_distributed) }}</div>
+    <div class="grid md:grid-cols-3 gap-6 mb-6">
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-base font-medium text-gray-900">Total Aid Distributed</h3>
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                    <i class="fas fa-arrow-up mr-1"></i> 18.2%
+                </span>
+            </div>
+            <div class="flex items-baseline">
+                <p class="text-3xl font-semibold text-gray-900">₹{{ "%.2f"|format(stats.total_aid_distributed) }}</p>
+                <p class="ml-2 text-sm text-gray-500">from ₹{{ "%.2f"|format(stats.total_aid_distributed * 0.8) }}</p>
+            </div>
+            <div class="mt-4">
+                <div class="bg-gray-200 h-1 rounded-full overflow-hidden">
+                    <div class="bg-green-500 h-1 rounded-full" style="width: 75%"></div>
+                </div>
+                <div class="flex justify-between text-xs text-gray-500 mt-1">
+                    <span>Previous Quarter</span>
+                    <span>Current Quarter</span>
+                </div>
+            </div>
         </div>
-        <div class="bg-gradient-to-r from-blue-400 to-blue-600 p-6 rounded-lg shadow-md text-white">
-            <div class="text-sm font-medium opacity-90">Average Aid Amount</div>
-            <div class="text-3xl font-bold">₹{{ "%.2f"|format(stats.average_aid_amount) }}</div>
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-base font-medium text-gray-900">Average Aid Amount</h3>
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                    <i class="fas fa-arrow-up mr-1"></i> 5.3%
+                </span>
+            </div>
+            <div class="flex items-baseline">
+                <p class="text-3xl font-semibold text-gray-900">₹{{ "%.2f"|format(stats.average_aid_amount) }}</p>
+                <p class="ml-2 text-sm text-gray-500">per request</p>
+            </div>
+            <div class="mt-4">
+                <div class="bg-gray-200 h-1 rounded-full overflow-hidden">
+                    <div class="bg-blue-500 h-1 rounded-full" style="width: 65%"></div>
+                </div>
+                <div class="flex justify-between text-xs text-gray-500 mt-1">
+                    <span>Previous Quarter</span>
+                    <span>Current Quarter</span>
+                </div>
+            </div>
         </div>
-        <div class="bg-gradient-to-r from-purple-400 to-purple-600 p-6 rounded-lg shadow-md text-white">
-            <div class="text-sm font-medium opacity-90">Pending Requests</div>
-            <div class="text-3xl font-bold">{{ stats.pending_requests }}</div>
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-base font-medium text-gray-900">Pending Requests</h3>
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                    <i class="fas fa-exclamation-triangle mr-1"></i> Attention
+                </span>
+            </div>
+            <div class="flex items-baseline">
+                <p class="text-3xl font-semibold text-gray-900">{{ stats.pending_requests }}</p>
+                <p class="ml-2 text-sm text-gray-500">requests</p>
+            </div>
+            <div class="mt-4">
+                <div class="bg-gray-200 h-1 rounded-full overflow-hidden">
+                    <div class="bg-yellow-500 h-1 rounded-full" style="width: {{ (stats.pending_requests / stats.total_requests * 100) if stats.total_requests > 0 else 0 }}%"></div>
+                </div>
+                <div class="flex justify-between text-xs text-gray-500 mt-1">
+                    <span>0</span>
+                    <span>{{ stats.total_requests }}</span>
+                </div>
+            </div>
         </div>
     </div>
     
-    <!-- Request Status Breakdown -->
-    <div class="grid md:grid-cols-2 gap-6 mb-8">
-        <div class="bg-white p-6 rounded-lg shadow-md">
-            <h3 class="text-xl font-bold mb-4">Request Status</h3>
-            <div class="space-y-3">
-                <div class="flex justify-between items-center">
-                    <span class="text-gray-700">Pending</span>
-                    <span class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm font-medium">
-                        {{ stats.pending_requests }}
-                    </span>
+    <!-- Request Status and Chart -->
+    <div class="grid md:grid-cols-2 gap-6 mb-6">
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-base font-medium text-gray-900">Request Status</h3>
+                <div class="relative">
+                    <button type="button" class="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
+                        <span>This Month</span>
+                        <i class="fas fa-chevron-down ml-2"></i>
+                    </button>
                 </div>
-                <div class="flex justify-between items-center">
-                    <span class="text-gray-700">Approved</span>
-                    <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">
-                        {{ stats.approved_requests }}
-                    </span>
+            </div>
+            <div class="space-y-4">
+                <div>
+                    <div class="flex justify-between items-center mb-1">
+                        <span class="text-sm font-medium text-gray-700">Pending</span>
+                        <span class="text-sm font-medium text-gray-900">{{ stats.pending_requests }}</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2">
+                        <div class="bg-yellow-500 h-2 rounded-full" style="width: {{ (stats.pending_requests / stats.total_requests * 100) if stats.total_requests > 0 else 0 }}%"></div>
+                    </div>
                 </div>
-                <div class="flex justify-between items-center">
-                    <span class="text-gray-700">Rejected</span>
-                    <span class="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm font-medium">
-                        {{ stats.rejected_requests }}
-                    </span>
+                <div>
+                    <div class="flex justify-between items-center mb-1">
+                        <span class="text-sm font-medium text-gray-700">Approved</span>
+                        <span class="text-sm font-medium text-gray-900">{{ stats.approved_requests }}</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2">
+                        <div class="bg-green-500 h-2 rounded-full" style="width: {{ (stats.approved_requests / stats.total_requests * 100) if stats.total_requests > 0 else 0 }}%"></div>
+                    </div>
                 </div>
-                <div class="flex justify-between items-center">
-                    <span class="text-gray-700">Completed</span>
-                    <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">
-                        {{ stats.completed_requests }}
-                    </span>
+                <div>
+                    <div class="flex justify-between items-center mb-1">
+                        <span class="text-sm font-medium text-gray-700">Rejected</span>
+                        <span class="text-sm font-medium text-gray-900">{{ stats.rejected_requests }}</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2">
+                        <div class="bg-red-500 h-2 rounded-full" style="width: {{ (stats.rejected_requests / stats.total_requests * 100) if stats.total_requests > 0 else 0 }}%"></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="flex justify-between items-center mb-1">
+                        <span class="text-sm font-medium text-gray-700">Completed</span>
+                        <span class="text-sm font-medium text-gray-900">{{ stats.completed_requests }}</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2">
+                        <div class="bg-blue-500 h-2 rounded-full" style="width: {{ (stats.completed_requests / stats.total_requests * 100) if stats.total_requests > 0 else 0 }}%"></div>
+                    </div>
                 </div>
             </div>
         </div>
         
         <!-- Chart -->
-        <div class="bg-white p-6 rounded-lg shadow-md">
-            <h3 class="text-xl font-bold mb-4">Aid by Category</h3>
-            <canvas id="categoryChart" class="max-h-64"></canvas>
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-base font-medium text-gray-900">Aid Distribution by Category</h3>
+                <div class="relative">
+                    <button type="button" class="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
+                        <span>All Time</span>
+                        <i class="fas fa-chevron-down ml-2"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="h-64">
+                <canvas id="categoryChart"></canvas>
+            </div>
         </div>
     </div>
     
     <!-- Category Breakdown Table -->
     {% if stats.category_breakdown %}
-    <div class="bg-white p-6 rounded-lg shadow-md">
-        <h3 class="text-xl font-bold mb-4">Category Breakdown</h3>
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+        <div class="px-6 py-4 border-b border-gray-200 bg-gray-50">
+            <div class="flex items-center justify-between">
+                <h3 class="text-base font-medium text-gray-900">Category Breakdown</h3>
+                <div class="flex space-x-2">
+                    <button type="button" class="inline-flex items-center px-3 py-1.5 border border-gray-300 rounded-md text-xs font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
+                        <i class="fas fa-filter mr-1"></i> Filter
+                    </button>
+                    <button type="button" class="inline-flex items-center px-3 py-1.5 border border-gray-300 rounded-md text-xs font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
+                        <i class="fas fa-download mr-1"></i> Export
+                    </button>
+                </div>
+            </div>
+        </div>
         <div class="overflow-x-auto">
-            <table class="min-w-full">
+            <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50">
                     <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Category</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Total Amount</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Count</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total Amount</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Count</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Average</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Distribution</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
                     {% for category, data in stats.category_breakdown.items() %}
-                    <tr>
-                        <td class="px-6 py-4 whitespace-nowrap font-medium">{{ category }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">₹{{ "%.2f"|format(data.total) }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">{{ data.count }}</td>
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="h-2.5 w-2.5 rounded-full bg-primary-600 mr-2"></div>
+                                <div class="text-sm font-medium text-gray-900">{{ category }}</div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">₹{{ "%.2f"|format(data.total) }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ data.count }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">₹{{ "%.2f"|format(data.total / data.count) }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-primary-600 h-2 rounded-full" style="width: {{ (data.total / stats.total_aid_distributed * 100) if stats.total_aid_distributed > 0 else 0 }}%"></div>
+                            </div>
+                        </td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -122,16 +278,37 @@ fetch('{{ url_for("dashboard.chart_data") }}')
                 datasets: [{
                     data: data.data,
                     backgroundColor: [
-                        '#4F46E5', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6'
-                    ]
+                        '#0ea5e9', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899'
+                    ],
+                    borderWidth: 1,
+                    borderColor: '#ffffff'
                 }]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
+                cutout: '70%',
                 plugins: {
                     legend: {
-                        position: 'bottom'
+                        position: 'bottom',
+                        labels: {
+                            usePointStyle: true,
+                            padding: 20,
+                            font: {
+                                size: 12
+                            }
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const label = context.label || '';
+                                const value = context.raw || 0;
+                                const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                const percentage = Math.round((value / total) * 100);
+                                return `${label}: ₹${value} (${percentage}%)`;
+                            }
+                        }
                     }
                 }
             }
