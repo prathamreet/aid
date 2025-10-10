@@ -18,7 +18,8 @@ def login_required(f):
 @login_required
 def index():
     """Main dashboard view"""
-    stats = Analytics.get_dashboard_stats()
+    user_id = session.get('user_id')
+    stats = Analytics.get_dashboard_stats(user_id)
     user_role = session.get('user_role')
     
     return render_template('dashboard.html', stats=stats, role=user_role)

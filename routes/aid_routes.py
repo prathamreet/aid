@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session
 from models.database import AidRequest, User
 from functools import wraps
+from bson.objectid import ObjectId
 
 aid_bp = Blueprint('aid', __name__)
 
@@ -96,6 +97,23 @@ def my_requests():
     requests = AidRequest.get_user_requests(session['user_id'])
     return render_template('my_requests.html', requests=requests)
 
+@aid_bp.route('/my-donations')
+@login_required
+@role_required(['donor', 'admin'])
+def my_donations():
+    """View donor's donation history"""
+    donations = AidRequest.get_donor_contributions(session['user_id'])
+    total_donated = AidRequest.get_donor_total_contribution(session['user_id'])
+    
+    # Enrich with beneficiary data
+    for donation in donations:
+        user = User.find_by_id(donation['user_id'])
+        donation['user_name'] = user['name'] if user else 'Unknown'
+        # Add request ID for reference in the template
+        donation['request_id'] = str(donation['_id'])
+    
+    return render_template('my_donations.html', donations=donations, total_donated=total_donated)
+
 @aid_bp.route('/complete-request/<request_id>')
 @login_required
 @role_required(['donor', 'admin'])
@@ -104,3 +122,30 @@ def complete_request(request_id):
     AidRequest.update_status(request_id, 'completed', session['user_id'])
     flash('Request marked as completed', 'success')
     return redirect(url_for('aid.manage_requests'))
+
+@aid_bp.route('/delete-request/<request_id>')
+@login_required
+def delete_request(request_id):
+    """Delete an aid request"""
+    # Get the request to check ownership
+    aid_request = AidRequest.get_request_by_id(request_id)
+    
+    # Check if request exists
+    if not aid_request:
+        flash('Request not found', 'error')
+        return redirect(url_for('aid.my_requests'))
+    
+    # Check if user is the owner of the request or an admin
+    if str(aid_request['user_id']) != session['user_id'] and session['user_role'] != 'admin':
+        flash('You do not have permission to delete this request', 'error')
+        return redirect(url_for('aid.my_requests'))
+    
+    # Only allow deletion of pending requests
+    if aid_request['status'] != 'pending':
+        flash('Only pending requests can be deleted', 'error')
+        return redirect(url_for('aid.my_requests'))
+    
+    # Delete the request
+    AidRequest.delete_request(request_id)
+    flash('Request deleted successfully', 'success')
+    return redirect(url_for('aid.my_requests'))

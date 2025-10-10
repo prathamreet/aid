@@ -6,8 +6,12 @@ class Analytics:
     """Analytics utility for generating statistics"""
     
     @staticmethod
-    def get_dashboard_stats():
-        """Generate comprehensive dashboard statistics"""
+    def get_dashboard_stats(user_id=None):
+        """Generate comprehensive dashboard statistics
+        
+        Args:
+            user_id: If provided, includes user-specific statistics
+        """
         
         # Get all data
         users = list(mongo.db.users.find())
@@ -29,7 +33,8 @@ class Analytics:
             'total_aid_distributed': 0,
             'average_aid_amount': 0,
             'category_breakdown': {},
-            'recent_requests': []
+            'recent_requests': [],
+            'user_stats': {}
         }
         
         if not requests_df.empty:
@@ -56,6 +61,45 @@ class Analytics:
             
             # Recent requests (last 5)
             stats['recent_requests'] = requests[-5:] if len(requests) > 5 else requests
+            
+            # User-specific stats if user_id is provided
+            if user_id:
+                from bson.objectid import ObjectId
+                user_id_obj = ObjectId(user_id)
+                
+                # Find user
+                user = next((u for u in users if u['_id'] == user_id_obj), None)
+                
+                if user:
+                    user_role = user.get('role')
+                    user_stats = {}
+                    
+                    if user_role == 'beneficiary':
+                        # Filter requests by this user
+                        user_requests = [r for r in requests if r.get('user_id') == user_id_obj]
+                        
+                        user_stats = {
+                            'total_requests': len(user_requests),
+                            'pending_requests': len([r for r in user_requests if r.get('status') == 'pending']),
+                            'approved_requests': len([r for r in user_requests if r.get('status') == 'approved']),
+                            'completed_requests': len([r for r in user_requests if r.get('status') == 'completed']),
+                            'rejected_requests': len([r for r in user_requests if r.get('status') == 'rejected']),
+                            'total_received': sum(r.get('amount', 0) for r in user_requests if r.get('status') in ['approved', 'completed'])
+                        }
+                    
+                    elif user_role == 'donor':
+                        # Filter requests approved by this donor
+                        donor_requests = [r for r in requests if r.get('approved_by') == user_id_obj]
+                        
+                        user_stats = {
+                            'total_donations': len(donor_requests),
+                            'approved_requests': len([r for r in donor_requests if r.get('status') == 'approved']),
+                            'completed_requests': len([r for r in donor_requests if r.get('status') == 'completed']),
+                            'total_donated': sum(r.get('amount', 0) for r in donor_requests),
+                            'beneficiaries_helped': len(set(str(r.get('user_id')) for r in donor_requests))
+                        }
+                    
+                    stats['user_stats'] = user_stats
         
         return stats
     

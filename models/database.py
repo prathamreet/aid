@@ -80,6 +80,30 @@ class AidRequest:
         return list(mongo.db.aid_requests.find({'user_id': ObjectId(user_id)}))
     
     @staticmethod
+    def get_donor_contributions(donor_id):
+        """Get all requests approved or completed by a specific donor"""
+        return list(mongo.db.aid_requests.find({
+            'approved_by': ObjectId(donor_id),
+            'status': {'$in': ['approved', 'completed']}
+        }))
+    
+    @staticmethod
+    def get_donor_total_contribution(donor_id):
+        """Get total amount donated by a specific donor"""
+        pipeline = [
+            {'$match': {
+                'approved_by': ObjectId(donor_id),
+                'status': {'$in': ['approved', 'completed']}
+            }},
+            {'$group': {
+                '_id': None,
+                'total': {'$sum': '$amount'}
+            }}
+        ]
+        result = list(mongo.db.aid_requests.aggregate(pipeline))
+        return result[0]['total'] if result else 0
+    
+    @staticmethod
     def update_status(request_id, status, donor_id=None):
         """Update request status"""
         update_data = {
@@ -98,3 +122,8 @@ class AidRequest:
     def get_request_by_id(request_id):
         """Get single request by ID"""
         return mongo.db.aid_requests.find_one({'_id': ObjectId(request_id)})
+        
+    @staticmethod
+    def delete_request(request_id):
+        """Delete an aid request by ID"""
+        return mongo.db.aid_requests.delete_one({'_id': ObjectId(request_id)})

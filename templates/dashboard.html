@@ -263,6 +263,106 @@
         </div>
     </div>
     {% endif %}
+    
+    <!-- User-specific Stats -->
+    {% if stats.user_stats %}
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+        <div class="flex items-center justify-between mb-4">
+            <h2 class="text-lg font-medium text-gray-900">Your Activity</h2>
+            <div>
+                {% if role == 'beneficiary' %}
+                    <a href="{{ url_for('aid.my_requests') }}" class="text-sm text-primary-600 hover:text-primary-800">
+                        <i class="fas fa-history mr-1"></i> View Full History
+                    </a>
+                {% elif role == 'donor' %}
+                    <a href="{{ url_for('aid.my_donations') }}" class="text-sm text-primary-600 hover:text-primary-800">
+                        <i class="fas fa-history mr-1"></i> View Full History
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+        
+        {% if role == 'beneficiary' %}
+        <div class="grid md:grid-cols-4 gap-6">
+            <div class="flex items-center p-4 bg-gray-50 rounded-lg">
+                <div class="flex-shrink-0 p-3 rounded-md bg-blue-100">
+                    <i class="fas fa-file-alt text-blue-600"></i>
+                </div>
+                <div class="ml-4">
+                    <p class="text-sm font-medium text-gray-500">Total Requests</p>
+                    <p class="text-2xl font-semibold text-gray-900">{{ stats.user_stats.total_requests }}</p>
+                </div>
+            </div>
+            <div class="flex items-center p-4 bg-gray-50 rounded-lg">
+                <div class="flex-shrink-0 p-3 rounded-md bg-yellow-100">
+                    <i class="fas fa-clock text-yellow-600"></i>
+                </div>
+                <div class="ml-4">
+                    <p class="text-sm font-medium text-gray-500">Pending</p>
+                    <p class="text-2xl font-semibold text-gray-900">{{ stats.user_stats.pending_requests }}</p>
+                </div>
+            </div>
+            <div class="flex items-center p-4 bg-gray-50 rounded-lg">
+                <div class="flex-shrink-0 p-3 rounded-md bg-green-100">
+                    <i class="fas fa-check-circle text-green-600"></i>
+                </div>
+                <div class="ml-4">
+                    <p class="text-sm font-medium text-gray-500">Approved/Completed</p>
+                    <p class="text-2xl font-semibold text-gray-900">{{ stats.user_stats.approved_requests + stats.user_stats.completed_requests }}</p>
+                </div>
+            </div>
+            <div class="flex items-center p-4 bg-gray-50 rounded-lg">
+                <div class="flex-shrink-0 p-3 rounded-md bg-purple-100">
+                    <i class="fas fa-money-bill-wave text-purple-600"></i>
+                </div>
+                <div class="ml-4">
+                    <p class="text-sm font-medium text-gray-500">Total Received</p>
+                    <p class="text-2xl font-semibold text-gray-900">₹{{ "%.2f"|format(stats.user_stats.total_received) }}</p>
+                </div>
+            </div>
+        </div>
+        {% elif role == 'donor' %}
+        <div class="grid md:grid-cols-4 gap-6">
+            <div class="flex items-center p-4 bg-gray-50 rounded-lg">
+                <div class="flex-shrink-0 p-3 rounded-md bg-blue-100">
+                    <i class="fas fa-hand-holding-heart text-blue-600"></i>
+                </div>
+                <div class="ml-4">
+                    <p class="text-sm font-medium text-gray-500">Total Donations</p>
+                    <p class="text-2xl font-semibold text-gray-900">{{ stats.user_stats.total_donations }}</p>
+                </div>
+            </div>
+            <div class="flex items-center p-4 bg-gray-50 rounded-lg">
+                <div class="flex-shrink-0 p-3 rounded-md bg-green-100">
+                    <i class="fas fa-check text-green-600"></i>
+                </div>
+                <div class="ml-4">
+                    <p class="text-sm font-medium text-gray-500">Approved</p>
+                    <p class="text-2xl font-semibold text-gray-900">{{ stats.user_stats.approved_requests }}</p>
+                </div>
+            </div>
+            <div class="flex items-center p-4 bg-gray-50 rounded-lg">
+                <div class="flex-shrink-0 p-3 rounded-md bg-indigo-100">
+                    <i class="fas fa-users text-indigo-600"></i>
+                </div>
+                <div class="ml-4">
+                    <p class="text-sm font-medium text-gray-500">People Helped</p>
+                    <p class="text-2xl font-semibold text-gray-900">{{ stats.user_stats.beneficiaries_helped }}</p>
+                </div>
+            </div>
+            <div class="flex items-center p-4 bg-gray-50 rounded-lg">
+                <div class="flex-shrink-0 p-3 rounded-md bg-purple-100">
+                    <i class="fas fa-money-bill-wave text-purple-600"></i>
+                </div>
+                <div class="ml-4">
+                    <p class="text-sm font-medium text-gray-500">Total Donated</p>
+                    <p class="text-2xl font-semibold text-gray-900">₹{{ "%.2f"|format(stats.user_stats.total_donated) }}</p>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    {% endif %}
 </div>
 
 <script>
