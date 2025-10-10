@@ -1,0 +1,10 @@
+venv
+.env
+*.pyc
+__pycache__
+.idea/
+.vscode/
+dist/
+build/
+docs/_build/
+.zencoder

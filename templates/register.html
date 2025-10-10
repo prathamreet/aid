@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}Register - Micro-Lending{% endblock %}
+
+{% block content %}
+<div class="max-w-md mx-auto">
+    <div class="bg-white rounded-lg shadow-md p-8">
+        <h2 class="text-2xl font-bold mb-6 text-center">Create Account</h2>
+        <form method="POST" action="{{ url_for('auth.register') }}">
+            <div class="mb-4">
+                <label class="block text-gray-700 font-medium mb-2">Full Name</label>
+                <input type="text" name="name" required 
+                    class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            </div>
+            
+            <div class="mb-4">
+                <label class="block text-gray-700 font-medium mb-2">Email</label>
+                <input type="email" name="email" required 
+                    class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            </div>
+            
+            <div class="mb-4">
+                <label class="block text-gray-700 font-medium mb-2">Password</label>
+                <input type="password" name="password" required 
+                    class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            </div>
+            
+            <div class="mb-6">
+                <label class="block text-gray-700 font-medium mb-2">I am a...</label>
+                <select name="role" required 
+                    class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <option value="beneficiary">Beneficiary (Seeking Aid)</option>
+                    <option value="donor">Donor (Providing Aid)</option>
+                </select>
+            </div>
+            
+            <button type="submit" 
+                class="w-full bg-indigo-600 text-white py-2 rounded-md hover:bg-indigo-700 font-medium">
+                Register
+            </button>
+        </form>
+        
+        <p class="mt-4 text-center text-gray-600">
+            Already have an account? 
+            <a href="{{ url_for('auth.login') }}" class="text-indigo-600 hover:underline">Login</a>
+        </p>
+    </div>
+</div>
+{% endblock %}

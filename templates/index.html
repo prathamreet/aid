@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="text-center">
+    <!-- Hero Section -->
+    <div class="py-12">
+        <h1 class="text-5xl font-bold text-gray-900 mb-4">
+            Empowering Communities Through Micro-Lending
+        </h1>
+        <p class="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
+            Connect donors with those in need. Our platform facilitates transparent and efficient distribution of financial aid and micro-loans for education, health, livelihood, and emergency needs.
+        </p>
+        {% if not session.user_id %}
+            <div class="space-x-4">
+                <a href="{{ url_for('auth.register') }}" class="bg-indigo-600 text-white px-8 py-3 rounded-lg text-lg hover:bg-indigo-700 inline-block">
+                    Get Started
+                </a>
+                <a href="{{ url_for('auth.login') }}" class="bg-gray-200 text-gray-800 px-8 py-3 rounded-lg text-lg hover:bg-gray-300 inline-block">
+                    Sign In
+                </a>
+            </div>
+        {% else %}
+            <a href="{{ url_for('dashboard.index') }}" class="bg-indigo-600 text-white px-8 py-3 rounded-lg text-lg hover:bg-indigo-700 inline-block">
+                Go to Dashboard
+            </a>
+        {% endif %}
+    </div>
+
+    <!-- Features Section -->
+    <div class="grid md:grid-cols-3 gap-8 mt-16">
+        <div class="bg-white p-6 rounded-lg shadow-md">
+            <div class="text-4xl mb-4">🎓</div>
+            <h3 class="text-xl font-bold mb-2">Education Support</h3>
+            <p class="text-gray-600">Help students achieve their academic dreams with educational loans and grants.</p>
+        </div>
+        <div class="bg-white p-6 rounded-lg shadow-md">
+            <div class="text-4xl mb-4">🏥</div>
+            <h3 class="text-xl font-bold mb-2">Healthcare Aid</h3>
+            <p class="text-gray-600">Provide financial assistance for medical emergencies and healthcare needs.</p>
+        </div>
+        <div class="bg-white p-6 rounded-lg shadow-md">
+            <div class="text-4xl mb-4">💼</div>
+            <h3 class="text-xl font-bold mb-2">Livelihood Loans</h3>
+            <p class="text-gray-600">Support small businesses and entrepreneurship with micro-loans.</p>
+        </div>
+    </div>
+
+    <!-- How It Works -->
+    <div class="mt-16 bg-white p-8 rounded-lg shadow-md">
+        <h2 class="text-3xl font-bold mb-8">How It Works</h2>
+        <div class="grid md:grid-cols-4 gap-6 text-left">
+            <div>
+                <div class="bg-indigo-100 text-indigo-600 w-12 h-12 rounded-full flex items-center justify-center font-bold text-xl mb-3">1</div>
+                <h4 class="font-bold mb-2">Register</h4>
+                <p class="text-gray-600 text-sm">Create an account as a donor or beneficiary</p>
+            </div>
+            <div>
+                <div class="bg-indigo-100 text-indigo-600 w-12 h-12 rounded-full flex items-center justify-center font-bold text-xl mb-3">2</div>
+                <h4 class="font-bold mb-2">Submit Request</h4>
+                <p class="text-gray-600 text-sm">Beneficiaries submit aid requests with details</p>
+            </div>
+            <div>
+                <div class="bg-indigo-100 text-indigo-600 w-12 h-12 rounded-full flex items-center justify-center font-bold text-xl mb-3">3</div>
+                <h4 class="font-bold mb-2">Review & Approve</h4>
+                <p class="text-gray-600 text-sm">Donors review and approve worthy requests</p>
+            </div>
+            <div>
+                <div class="bg-indigo-100 text-indigo-600 w-12 h-12 rounded-full flex items-center justify-center font-bold text-xl mb-3">4</div>
+                <h4 class="font-bold mb-2">Track Progress</h4>
+                <p class="text-gray-600 text-sm">Monitor aid distribution through dashboard</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

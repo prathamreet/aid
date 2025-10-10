@@ -1,0 +1,30 @@
+from flask import Flask, render_template
+from config import Config
+from models.database import mongo
+from routes.auth_routes import auth_bp
+from routes.aid_routes import aid_bp
+from routes.dashboard_routes import dashboard_bp
+
+def create_app():
+    """Application factory pattern"""
+    app = Flask(__name__)
+    app.config.from_object(Config)
+    
+    # Initialize MongoDB
+    mongo.init_app(app)
+    
+    # Register blueprints
+    app.register_blueprint(auth_bp)
+    app.register_blueprint(aid_bp)
+    app.register_blueprint(dashboard_bp)
+    
+    # Home route
+    @app.route('/')
+    def index():
+        return render_template('index.html')
+    
+    return app
+
+if __name__ == '__main__':
+    app = create_app()
+    app.run(debug=True, host='0.0.0.0', port=5000)
