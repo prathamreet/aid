@@ -4,6 +4,8 @@ from models.database import mongo
 from routes.auth_routes import auth_bp
 from routes.aid_routes import aid_bp
 from routes.dashboard_routes import dashboard_bp
+from routes.profile_routes import profile_bp
+from routes.payment_routes import payment_bp
 
 def create_app():
     """Application factory pattern"""
@@ -17,6 +19,8 @@ def create_app():
     app.register_blueprint(auth_bp)
     app.register_blueprint(aid_bp)
     app.register_blueprint(dashboard_bp)
+    app.register_blueprint(profile_bp)
+    app.register_blueprint(payment_bp)
     
     # Home route
     @app.route('/')

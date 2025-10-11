@@ -16,7 +16,10 @@ class User:
             'email': email.lower(),
             'password_hash': generate_password_hash(password),
             'role': role,  # donor, beneficiary, admin
-            'created_at': datetime.utcnow()
+            'created_at': datetime.utcnow(),
+            'bank_account': None,  # For beneficiaries to receive payments
+            'bank_name': None,
+            'account_holder': None
         }
         return mongo.db.users.insert_one(user)
     
@@ -44,6 +47,14 @@ class User:
     def get_all_beneficiaries():
         """Get all beneficiary users"""
         return list(mongo.db.users.find({'role': 'beneficiary'}))
+        
+    @staticmethod
+    def update_profile(user_id, update_data):
+        """Update user profile information"""
+        return mongo.db.users.update_one(
+            {'_id': ObjectId(user_id)},
+            {'$set': update_data}
+        )
 
 
 class AidRequest:
