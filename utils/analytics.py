@@ -118,3 +118,4 @@ class Analytics:
             'labels': list(category_totals.keys()),
             'data': [float(v) for v in category_totals.values()]
         }
+    
