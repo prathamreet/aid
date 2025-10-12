@@ -138,3 +138,5 @@ class AidRequest:
     def delete_request(request_id):
         """Delete an aid request by ID"""
         return mongo.db.aid_requests.delete_one({'_id': ObjectId(request_id)})
+    
+    
