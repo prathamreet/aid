@@ -49,8 +49,8 @@ def payment_gateway(request_id):
     beneficiary = User.find_by_id(aid_request['user_id'])
     
     # Check if beneficiary has bank account information
-    if not beneficiary.get('bank_account'):
-        flash('Beneficiary has not provided bank account information yet', 'error')
+    if not beneficiary.get('bank_account') or not beneficiary.get('account_holder') or not beneficiary.get('bank_name'):
+        flash('Beneficiary has not provided complete bank account information yet. Please ask them to update their profile first.', 'error')
         return redirect(url_for('aid.manage_requests'))
     
     return render_template('payment_gateway.html', 
@@ -83,10 +83,29 @@ def process_payment(request_id):
         return redirect(url_for('payment.payment_gateway', request_id=request_id))
     
     # In a real application, we would process the payment here
-    # For this mock implementation, we'll just approve the request
+    # For this mock implementation, we'll simulate payment processing
     
-    # Update the request status to approved
-    AidRequest.update_status(request_id, 'approved', session['user_id'])
+    import time
+    import random
     
-    flash('Payment processed successfully! The request has been approved.', 'success')
-    return redirect(url_for('aid.my_donations'))
+    # Simulate payment processing delay (in a real app, this would be handled by payment gateway)
+    time.sleep(2)  # 2 second delay to simulate processing
+    
+    # Simulate payment success/failure (95% success rate for demo)
+    payment_successful = random.random() < 0.95
+    
+    if payment_successful:
+        # Update the request status to approved
+        AidRequest.update_status(request_id, 'approved', session['user_id'])
+        
+        # Get beneficiary info for the flash message
+        beneficiary = User.find_by_id(aid_request['user_id'])
+        
+        flash(f'Payment of ₹{aid_request["amount"]:,.2f} processed successfully via {payment_method.upper()}! '
+              f'The funds have been transferred to {beneficiary["name"]}\'s account ending in ***{beneficiary["bank_account"][-4:]}. '
+              f'The request has been approved.', 'success')
+        return redirect(url_for('aid.my_donations'))
+    else:
+        # Simulate payment failure
+        flash(f'Payment processing failed via {payment_method.upper()}. Please try again with a different payment method or contact support.', 'error')
+        return redirect(url_for('payment.payment_gateway', request_id=request_id))

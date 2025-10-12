@@ -76,10 +76,9 @@ def manage_requests():
 @login_required
 @role_required(['donor', 'admin'])
 def approve_request(request_id):
-    """Approve an aid request"""
-    AidRequest.update_status(request_id, 'approved', session['user_id'])
-    flash('Request approved successfully', 'success')
-    return redirect(url_for('aid.manage_requests'))
+    """Approve an aid request (redirects to payment gateway)"""
+    # Redirect to payment gateway instead of direct approval
+    return redirect(url_for('payment.payment_gateway', request_id=request_id))
 
 @aid_bp.route('/reject-request/<request_id>')
 @login_required
