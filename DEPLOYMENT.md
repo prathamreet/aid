@@ -22,7 +22,7 @@ In Railway dashboard, go to your project → Variables tab:
 **Required Variables:**
 ```
 SECRET_KEY=meow_meow
-MONGO_HOST=mongodb+srv://prathamreetworkspace:SUVkozktC7ekjwJi@cluster0.lvwidjo.mongodb.net
+MONGO_HOST=
 MONGO_DB_NAME=production
 ```
 
